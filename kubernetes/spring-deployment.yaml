@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: spring
+  template:
+    metadata:
+      labels:
+        component: spring
+    spec:
+      containers:
+        - name: spring
+          image: vairome/pepito-spring
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PGUSER
+              value: postgres
+            - name: PGHOST
+              value: pern-db-instance-dev.cn0bi6opkfp1.us-east-1.rds.amazonaws.com
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD
